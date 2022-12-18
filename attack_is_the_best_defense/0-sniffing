@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#sniff a packet over an unencrypted networ using tcpdump
+sudo tcpdump -A  port 587
