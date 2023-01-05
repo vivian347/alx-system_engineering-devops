@@ -9,4 +9,3 @@ sudo apt-get install nginx nginx-common nginx-core -y
 sudo touch /var/www/html/index.html
 echo "Hello World!" | sudo tee -a /var/www/html/index.html > /dev/null
 sudo service nginx restart
-
