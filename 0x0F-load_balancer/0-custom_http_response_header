@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# configure web-02 to be identical to web-01.
+#+ Configure Nginx so that its HTTP response contains
+#++ a custom header (on web-01 and web-02)
+#+++ The name of the custom HTTP header must be X-Served-By
+#+++ The value of the custom HTTP header must be the hostname
+#+++ of the server Nginx is running on
+
+sudo apt-get -y update && sudo apt-get -y upgrade
+sudo apt-get -y install nginx
+sudo chown -R "$USER":"$USER" /var/www/
+sudo chown -R "$USER":"$USER" /etc/nginx
+echo "Hello World!" | sudo tee -a /var/www/html/index.html > /dev/null
+echo "Ceci n\'est pas une page" > sudo tee -a /var/ww/html/custom_404.html
+
+#Redirection
+line="\\\trewrite ^/redirect_me https://www.youtube.com/watch?v=MSRcC626prw permanent;"
+sudo sed -i "26i $line" /etc/nginx/sites-available/default
+
+#Error page
+sudo sed -i '/^\slocation.*/i \        error_page 404 /custom_404.html;' /etc/nginx/sites-available/default
+
+#response header
+sed -i '/listen 80 default_server;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+sudo service nginx restart
