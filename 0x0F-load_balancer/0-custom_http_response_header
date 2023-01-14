@@ -11,15 +11,22 @@ sudo apt-get -y install nginx
 sudo chown -R "$USER":"$USER" /var/www/
 sudo chown -R "$USER":"$USER" /etc/nginx
 echo "Hello World!" | sudo tee -a /var/www/html/index.html > /dev/null
-echo "Ceci n\'est pas une page" > sudo tee -a /var/ww/html/custom_404.html
+echo "Ceci n'est pas une page" | sudo tee -a /var/www/html/404.html
 
-#Redirection
-line="\\\trewrite ^/redirect_me https://www.youtube.com/watch?v=MSRcC626prw permanent;"
-sudo sed -i "26i $line" /etc/nginx/sites-available/default
+printf %s "server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By $HOSTNAME;
+    root   /var/www/html;
+    index  index.html index.htm;
+    location /redirect_me {
+        return 301 http://cuberule.com/;
+    }
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}" | sudo tee -a /etc/nginx/sites-available/default
 
-#Error page
-sudo sed -i '/^\slocation.*/i \        error_page 404 /custom_404.html;' /etc/nginx/sites-available/default
-
-#response header
-sed -i '/listen 80 default_server;/a add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
 sudo service nginx restart
