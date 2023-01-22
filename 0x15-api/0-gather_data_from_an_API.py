@@ -27,8 +27,8 @@ def tasks_done(id):
             tasks += "\t " + task.get("title") + "\n"
 
     print("Employee {} is done with ({}/{}):".format(employee_name,
-                                                    completed_task,
-                                                    no_tasks))
+                                                     completed_task,
+                                                     no_tasks))
     print(tasks[:-1])
 
 

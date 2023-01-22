@@ -10,9 +10,8 @@ if __name__ == '__main__':
     api_url = "https://jsonplaceholder.typicode.com/users/" + user_id
     response = requests.get(api_url).json()
     username = response.get("username")
-    req = requests.get(
-            'https://jsonplaceholder.typicode.com/users/' +
-        (user_id) + '/todos')
+    req = requests.get('https://jsonplaceholder.typicode.com/users/' +
+                       (user_id) + '/todos')
     with open("{}.csv".format(user_id), "w") as file_c:
         writer = csv.writer(file_c, quoting=csv.QUOTE_ALL)
         for task in req.json():
