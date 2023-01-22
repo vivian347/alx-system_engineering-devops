@@ -1,19 +1,24 @@
 #!/usr/bin/python3
-""" extend your Python script to export data in the CSV format. """
-
-import csv
+"""
+Script that exports an employee TODO tasks to a json file
+Is an interger representing an employee id.
+"""
+import json
 import requests
 import sys
 
+
 if __name__ == '__main__':
-    user_id = sys.argv[1]
-    api_url = "https://jsonplaceholder.typicode.com/users/" + user_id
-    response = requests.get(api_url).json()
-    username = response.get("username")
-    req = requests.get('https://jsonplaceholder.typicode.com/users/' +
-                       (user_id) + '/todos')
-    with open("{}.csv".format(user_id), "w") as file_c:
-        writer = csv.writer(file_c, quoting=csv.QUOTE_ALL)
-        for task in req.json():
-            writer.writerow([user_id, username,
-                            task.get("completed"), task.get("title")])
+    arg_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    users = requests.get("https://jsonplaceholder.typicode.com/users/{}"
+                         .format(arg_id)).json()
+    todos = requests.get("https://jsonplaceholder.typicode.com/todos?userId={}"
+                         .format(sys.argv[1])).json()
+
+    with open("{}.json".format(arg_id), "w") as user_id:
+        json.dump({arg_id: [{
+            'task': task.get('title'),
+            'completed': task.get('completed'),
+            'username': users.get('username')
+        } for task in todos]}, user_id)

@@ -1,35 +1,40 @@
 #!/usr/bin/python3
-"""Python script that, using this REST API, for a given employee ID,
-returns information about his/her TODO list progress.
+"""Script that exports an employee TODO tasks to a csv file
+    Parameters:
+    employee_id: Is an interger representing an employee id.
 """
 import requests
 import sys
 
 
 def tasks_done(id):
-    " displays an employee completed TODO tasks """
-    api_url = "https://jsonplaceholder.typicode.com/users/{}".format(id)
-    response = requests.get(api_url)
+    """Script that displays an employee completed TODO tasks in stout
+        Parameters:
+        employee_id: Is an interger representing an employee id.
+    """
+
+    url = "https://jsonplaceholder.typicode.com/users/{}".format(id)
+    response = requests.get(url)
     response_json = response.json()
     employee_name = response_json.get("name")
 
-    api_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(id)
-    todos = requests.get(api_url)
+    url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(id)
+    todos = requests.get(url)
     todos_json = todos.json()
-    no_tasks = len(todos_json)
+    number_tasks = len(todos_json)
 
-    completed_task = 0
-    tasks = ""
+    task_compleated = 0
+    task_list = ""
 
     for task in todos_json:
         if task.get("completed") is True:
-            completed_task += 1
-            tasks += "\t " + task.get("title") + "\n"
+            task_compleated += 1
+            task_list += "\t " + task.get("title") + "\n"
 
-    print("Employee {} is done with ({}/{}):".format(employee_name,
-                                                     completed_task,
-                                                     no_tasks))
-    print(tasks[:-1])
+    print("Employee {} is done with tasks({}/{}):".format(employee_name,
+                                                          task_compleated,
+                                                          number_tasks))
+    print(task_list[:-1])
 
 
 if __name__ == "__main__":
