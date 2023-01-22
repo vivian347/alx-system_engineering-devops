@@ -1,4 +1,4 @@
-#!/usrbin/python3
+#!/usr/bin/python3
 """ exports employee todo tasks to a json file """
 import json
 import requests
