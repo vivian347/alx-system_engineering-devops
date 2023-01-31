@@ -7,7 +7,7 @@ import requests
 def top_ten(subreddit):
     """ prints title of 1st 10 hot posts listed for a subreddit """
     headers = {
-            'User-Agent': 'My Reddit API Client'
+            'User-Agent': 'linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)'
             }
     params = {
             "limit": 10
