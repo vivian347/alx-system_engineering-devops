@@ -16,12 +16,8 @@ def top_ten(subreddit):
                             f'https://www.reddit.com/r/{subreddit}/hot.json',
                             headers=headers, params=params,
                             allow_redirects=False)
-
-    if response.status_code == 200:
-        data = response.json()
-        hot_posts = [post['data']['title']
-                     for post in data['data']['children']]
-        for post in hot_posts:
-            print(f"{post}")
-    else:
+    if response.status_code == 404:
         print("None")
+        return
+    results = response.json().get("data")
+    [print(c.get("data").get("title")) for c in results.get("children")]
